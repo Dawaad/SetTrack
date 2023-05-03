@@ -1,14 +1,18 @@
 //
-//  ExerciseSelectionTableViewController.swift
+//  ChooseDifficultyTableViewController.swift
 //  FIT3178-Assignment-Project
 //
-//  Created by Jared Tucker on 25/4/2023.
+//  Created by Jared Tucker on 1/5/2023.
 //
 
 import UIKit
+protocol DifficultyChangeDelegate: AnyObject{
+    func selectDifficulty(_ selectedDifficulty: String)
+}
 
-class ExerciseSelectionTableViewController: UITableViewController {
-
+class ChooseDifficultyTableViewController: UITableViewController {
+    weak var delegate: DifficultyChangeDelegate?
+    let difficulty: [String] = ["beginner", "intermediate", "expert"]
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,23 +27,30 @@ class ExerciseSelectionTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return difficulty.count
     }
 
-    /*
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "difficultyCell", for: indexPath)
 
-        // Configure the cell...
+        var content = cell.defaultContentConfiguration()
+        content.text = difficulty[indexPath.row].capitalized
+        cell.contentConfiguration = content
 
         return cell
     }
-    */
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let difficulty = difficulty[indexPath.row]
+        delegate?.selectDifficulty(difficulty)
+        self.navigationController?.popViewController(animated: true)
+        
+    }
 
     /*
     // Override to support conditional editing of the table view.

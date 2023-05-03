@@ -1,13 +1,19 @@
 //
-//  ExerciseCategoryTableViewController.swift
+//  ChooseCategoryTableViewController.swift
 //  FIT3178-Assignment-Project
 //
-//  Created by Jared Tucker on 25/4/2023.
+//  Created by Jared Tucker on 1/5/2023.
 //
 
 import UIKit
 
-class ExerciseCategoryTableViewController: UITableViewController {
+protocol CategoryChangeDelegate: AnyObject{
+    func selectCategory(_ selectedCategory: String)
+}
+
+
+class ChooseCategoryTableViewController: UITableViewController {
+    weak var delegate: CategoryChangeDelegate?
     
     let CELL_CHEST = "chestCategoryCell"
     let SECTION_CHEST = 0
@@ -40,11 +46,17 @@ class ExerciseCategoryTableViewController: UITableViewController {
         "Triceps",
         "Forearms"
     ]
-    //Organise them and then seperate them through table headers!?
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-    let CELL_CATEGORY = "categoryCell"
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
 
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
     func getCategory(section:Int, row:Int) -> String? {
         var category: String?
         switch section {
@@ -82,18 +94,6 @@ class ExerciseCategoryTableViewController: UITableViewController {
         
         return cell
     }
-    
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
 
     // MARK: - Table view data source
 
@@ -116,10 +116,8 @@ class ExerciseCategoryTableViewController: UITableViewController {
         default:
             return 0
         }
-        
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         var category: String?
@@ -150,9 +148,7 @@ class ExerciseCategoryTableViewController: UITableViewController {
             return " "
         }
     }
-    
 
-    
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
@@ -160,11 +156,10 @@ class ExerciseCategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let category = getCategory(section:  indexPath.section, row: indexPath.row)
-        
-        performSegue(withIdentifier: "showExerciseSegue", sender: (category))
+        let category = getCategory(section: indexPath.section, row: indexPath.row)
+        delegate?.selectCategory(category!)
+        self.navigationController?.popViewController(animated: true)
     }
-
 
     /*
     // Override to support editing the table view.
@@ -193,21 +188,14 @@ class ExerciseCategoryTableViewController: UITableViewController {
     }
     */
 
-    
+    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-        
-        if segue.identifier == "showExerciseSegue"{
-            if let (category) = sender as? (String),
-               let segueDestination = segue.destination as? ExerciseSelectionTableViewController{
-                segueDestination.selectedCategory = category
-            }
-        }
     }
-    
+    */
 
 }

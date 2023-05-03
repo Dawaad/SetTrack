@@ -32,12 +32,13 @@ protocol DatabaseProtocol: AnyObject{
     func emailCreateAccount(email:String, password: String)
     func googleSignIn(credential:AuthCredential)
 //    //Exercise Methods
-//    func createExercise() -> Exercise
+    func AddExerciseToFirebase(exercise: Exercise) -> Bool
 //    func deleteExercise() -> Void
 //
 //
 //    //Routine Creation Methods
 //    func addExerciseToRoutine(exercise:Exercise) -> Bool
 //    func removeExerciseFromRoutine(exercise:Exercise) -> Bool
-    
+      //Fetching Methods
+    func fetchUserExercises(userID: String) -> [Exercise]
 }

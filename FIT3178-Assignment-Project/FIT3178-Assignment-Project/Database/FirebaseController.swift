@@ -11,11 +11,15 @@ import FirebaseFirestoreSwift
 import Firebase
 
 class FirebaseController: NSObject, DatabaseProtocol{
+    
+    
+    
    
     
     var database: Firestore
     var authController: Auth
     var usersRef: CollectionReference?
+    var exercisesRef: CollectionReference?
     var listeners = MulticastDelegate<DatabaseListener>()
     
     
@@ -99,4 +103,23 @@ class FirebaseController: NSObject, DatabaseProtocol{
             }
         }
     }
+    
+    func AddExerciseToFirebase(exercise: Exercise) -> Bool {
+        exercisesRef = database.collection("exercises")
+        do{
+            if let exerciseRef = try exercisesRef?.addDocument(from: exercise){
+                exercise.id = exerciseRef.documentID
+            }
+        } catch {
+            print("Failed to add exercise to firestore")
+            return true
+        }
+        
+        return true
+    }
+    
+    func fetchUserExercises(userID: String) -> [Exercise] {
+        return []
+    }
+    
 }

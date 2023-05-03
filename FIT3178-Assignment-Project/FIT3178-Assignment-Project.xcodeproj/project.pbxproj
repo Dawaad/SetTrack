@@ -30,6 +30,8 @@
 		D663657329EE114800EF5F0F /* FIT3178_Assignment_Project.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D663657129EE114800EF5F0F /* FIT3178_Assignment_Project.xcdatamodeld */; };
 		D663657529EE114900EF5F0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D663657429EE114900EF5F0F /* Assets.xcassets */; };
 		D663657829EE114900EF5F0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D663657629EE114900EF5F0F /* LaunchScreen.storyboard */; };
+		D664A70429FF9A1E008EF5C5 /* ChooseCategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D664A70329FF9A1E008EF5C5 /* ChooseCategoryTableViewController.swift */; };
+		D664A70629FF9BF2008EF5C5 /* ChooseDifficultyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D664A70529FF9BF2008EF5C5 /* ChooseDifficultyTableViewController.swift */; };
 		D69A47C529F7CEBA00462196 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D69A47C329F7CEBA00462196 /* Main.storyboard */; };
 		D6A6E07529F687D000A90AE5 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A6E07429F687D000A90AE5 /* LoginViewController.swift */; };
 		D6A6E07729F687DF00A90AE5 /* EmailLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A6E07629F687DF00A90AE5 /* EmailLoginViewController.swift */; };
@@ -57,6 +59,8 @@
 		D663657429EE114900EF5F0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D663657729EE114900EF5F0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D663657929EE114900EF5F0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D664A70329FF9A1E008EF5C5 /* ChooseCategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCategoryTableViewController.swift; sourceTree = "<group>"; };
+		D664A70529FF9BF2008EF5C5 /* ChooseDifficultyTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseDifficultyTableViewController.swift; sourceTree = "<group>"; };
 		D69A47C429F7CEBA00462196 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D6A6E07429F687D000A90AE5 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D6A6E07629F687DF00A90AE5 /* EmailLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailLoginViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +122,8 @@
 		D663656729EE114800EF5F0F /* FIT3178-Assignment-Project */ = {
 			isa = PBXGroup;
 			children = (
+				D664A70229FF99A2008EF5C5 /* Login */,
+				D664A70129FF9984008EF5C5 /* Exercise Selection */,
 				D69A47C329F7CEBA00462196 /* Main.storyboard */,
 				D649001E29EE1B7D00390C22 /* GoogleService-Info.plist */,
 				D649001629EE14BC00390C22 /* Datamodel */,
@@ -130,15 +136,31 @@
 				D663657929EE114900EF5F0F /* Info.plist */,
 				D663657129EE114800EF5F0F /* FIT3178_Assignment_Project.xcdatamodeld */,
 				D61D5C9429F142F1008894EA /* LogTableViewController.swift */,
-				D6A6E07429F687D000A90AE5 /* LoginViewController.swift */,
-				D6A6E07629F687DF00A90AE5 /* EmailLoginViewController.swift */,
 				D602919A29F7A0500052F63C /* AccountViewController.swift */,
 				D602919C29F7A33B0052F63C /* TabBarViewController.swift */,
 				D606159D29F7DCD70002524E /* ExerciseCategoryTableViewController.swift */,
-				D606159F29F7DCE50002524E /* ExerciseSelectionTableViewController.swift */,
-				D60615A129F7DCF70002524E /* ExerciseCreationViewController.swift */,
 			);
 			path = "FIT3178-Assignment-Project";
+			sourceTree = "<group>";
+		};
+		D664A70129FF9984008EF5C5 /* Exercise Selection */ = {
+			isa = PBXGroup;
+			children = (
+				D606159F29F7DCE50002524E /* ExerciseSelectionTableViewController.swift */,
+				D60615A129F7DCF70002524E /* ExerciseCreationViewController.swift */,
+				D664A70329FF9A1E008EF5C5 /* ChooseCategoryTableViewController.swift */,
+				D664A70529FF9BF2008EF5C5 /* ChooseDifficultyTableViewController.swift */,
+			);
+			path = "Exercise Selection";
+			sourceTree = "<group>";
+		};
+		D664A70229FF99A2008EF5C5 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				D6A6E07429F687D000A90AE5 /* LoginViewController.swift */,
+				D6A6E07629F687DF00A90AE5 /* EmailLoginViewController.swift */,
+			);
+			path = Login;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,6 +253,7 @@
 				D618C70A29F676E9000A4D5B /* FirebaseController.swift in Sources */,
 				D663656D29EE114800EF5F0F /* ViewController.swift in Sources */,
 				D663656929EE114800EF5F0F /* AppDelegate.swift in Sources */,
+				D664A70629FF9BF2008EF5C5 /* ChooseDifficultyTableViewController.swift in Sources */,
 				D60615A029F7DCE50002524E /* ExerciseSelectionTableViewController.swift in Sources */,
 				D6AC5E9729F689ED00F09150 /* MutlicastDelegate.swift in Sources */,
 				D618C70429F676C2000A4D5B /* Session.swift in Sources */,
@@ -241,6 +264,7 @@
 				D6A6E07729F687DF00A90AE5 /* EmailLoginViewController.swift in Sources */,
 				D618C70829F676D3000A4D5B /* Routine.swift in Sources */,
 				D602919D29F7A33B0052F63C /* TabBarViewController.swift in Sources */,
+				D664A70429FF9A1E008EF5C5 /* ChooseCategoryTableViewController.swift in Sources */,
 				D663657329EE114800EF5F0F /* FIT3178_Assignment_Project.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

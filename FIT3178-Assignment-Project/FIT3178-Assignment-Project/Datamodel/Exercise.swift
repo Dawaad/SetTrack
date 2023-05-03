@@ -7,39 +7,28 @@
 
 import Foundation
 import FirebaseFirestoreSwift
-enum ExerciseCategory: Int{
-    case chest = 0
-    case back = 1
-    case biceps = 2
-    case triceps = 3
-    case legs = 4
-    case shoulders = 5
-}
 
-enum CodingLeys: String, CodingKey{
+
+enum CodingKeys: String, CodingKey{
     case id
     case name
-    case exerciseDescription
+    case instructions
+    case difficulty
     case category
+
 }
 
 class Exercise: NSObject, Codable{
-    @DocumentID var id: String?
+    var id: String?
     var name: String?
-    var exerciseDescription: String?
-    var category: Int?
+    var isCustom: Bool?
+    var userID: String?
+    var instructions: String?
+    var difficulty: String?
+    var category: String?
     
     
     
 }
 
-extension Exercise{
-    var exerciseCategory: ExerciseCategory{
-        get{
-            return ExerciseCategory(rawValue: self.category!)!
-        }
-        set{
-            self.category = newValue.rawValue
-        }
-    }
-}
+
