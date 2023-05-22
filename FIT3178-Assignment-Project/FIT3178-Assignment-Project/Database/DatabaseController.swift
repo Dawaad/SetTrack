@@ -14,11 +14,19 @@ enum DatabaseChange{
 }
 
 enum ListenerType{
-    
+    case all
+    case exercise
+    case routines
+    case routine
+    case sessions
 }
 
 protocol DatabaseListener: AnyObject{
     var listenerType: ListenerType {get set}
+    func onExerciseChange(change: DatabaseChange, userExercises: [Exercise])
+    
+    func onRoutineChange(change: DatabaseChange, routines: [Routine])
+    func onRoutineExerciseChange(change: DatabaseChange, routines: Routine)
 }
 
 protocol DatabaseProtocol: AnyObject{
@@ -32,13 +40,18 @@ protocol DatabaseProtocol: AnyObject{
     func emailCreateAccount(email:String, password: String)
     func googleSignIn(credential:AuthCredential)
 //    //Exercise Methods
-    func AddExerciseToFirebase(exercise: Exercise) -> Bool
-//    func deleteExercise() -> Void
+    func AddExerciseToFirebase(exercise: Exercise) -> Exercise
+    func deleteExercise(exercise: Exercise) -> Bool
 //
 //
 //    //Routine Creation Methods
-//    func addExerciseToRoutine(exercise:Exercise) -> Bool
-//    func removeExerciseFromRoutine(exercise:Exercise) -> Bool
+    var selectedRoutine: Routine{get}
+    func selectRoutine(routine:Routine) -> Void
+    func addRoutineToFirebase(routine:Routine) -> Bool
+    func addExerciseToRoutine(exercise:Exercise) -> Bool
+    //Routine Removal Methods
+    func removeExerciseFromRoutine(exercise:Exercise, routine: Routine) -> Bool
+    func removeRoutine(routine:Routine) -> Bool
       //Fetching Methods
-    func fetchUserExercises(userID: String) -> [Exercise]
+    
 }

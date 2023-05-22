@@ -71,10 +71,7 @@ class ExerciseCreationViewController: UIViewController, DifficultyChangeDelegate
         newExercise.difficulty = difficulty
         newExercise.userID = currentUserID ?? " "
         
-        if !(databaseController?.AddExerciseToFirebase(exercise: newExercise))!{
-            displayMessage("Unable to add Exercise", "An Error occured attempting to add exercise to database")
-            return
-        }
+        databaseController?.AddExerciseToFirebase(exercise: newExercise)
         
         navigationController?.popViewController(animated: true)
         

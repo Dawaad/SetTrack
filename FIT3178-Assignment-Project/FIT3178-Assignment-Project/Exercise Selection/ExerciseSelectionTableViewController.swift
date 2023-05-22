@@ -7,7 +7,12 @@
 
 import UIKit
 
-class ExerciseSelectionTableViewController: UITableViewController{
+class ExerciseSelectionTableViewController: UITableViewController, DatabaseListener{
+    
+    var listenerType: ListenerType = .exercise
+    
+    
+    
 
     
     var selectedCategory: String?
@@ -16,12 +21,29 @@ class ExerciseSelectionTableViewController: UITableViewController{
     let CELL_CUSTOM = "customExerciseCell"
     let SECTION_API = 1
     let CELL_API = "apiExerciseCell"
-    
+    weak var databaseController: DatabaseProtocol?
     var customExercises = [Exercise]()
     var apiExercises =  [Exercise]()
     var indicator = UIActivityIndicatorView()
+    
+    func onExerciseChange(change: DatabaseChange, userExercises: [Exercise]) {
+        customExercises = userExercises.filter{$0.category == apiCategoryFormat && $0.isCustom == true}
+        print("cringe")
+        tableView.reloadData()
+    }
+    
+    func onRoutineChange(change: DatabaseChange, routines: [Routine]) {
+        
+    }
+    
+    func onRoutineExerciseChange(change: DatabaseChange, routines: Routine) {
+        
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        databaseController = appDelegate?.databaseController
         
         guard let category = selectedCategory else{
             return
@@ -49,6 +71,15 @@ class ExerciseSelectionTableViewController: UITableViewController{
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        databaseController?.addListener(listener: self)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        databaseController?.removeListener(listener: self)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if apiExercises.isEmpty{
@@ -84,6 +115,7 @@ class ExerciseSelectionTableViewController: UITableViewController{
             
             for exercise in exerciseData{
                 exercise.category = apiCategoryFormat
+                exercise.isCustom = false
                 apiExercises.append(exercise)
             }
             
@@ -174,10 +206,22 @@ class ExerciseSelectionTableViewController: UITableViewController{
         return cell!
        
       
-
-    
-
-      
+    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var exercise: Exercise?
+        if indexPath.section == SECTION_CUSTOM{
+            exercise = customExercises[indexPath.row]
+           
+        }
+        else{
+            exercise = apiExercises[indexPath.row]
+        }
+        
+        self.databaseController?.addExerciseToRoutine(exercise: exercise!)
+        
+        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+        self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
+        
     }
     
 
@@ -197,7 +241,7 @@ class ExerciseSelectionTableViewController: UITableViewController{
         if editingStyle == .delete && indexPath.section == SECTION_CUSTOM{
             // Delete the row from the data source
             tableView.performBatchUpdates({
-                //Delete from database
+                databaseController?.deleteExercise(exercise: customExercises[indexPath.row])
                 customExercises.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 tableView.reloadSections([SECTION_CUSTOM], with: .automatic)

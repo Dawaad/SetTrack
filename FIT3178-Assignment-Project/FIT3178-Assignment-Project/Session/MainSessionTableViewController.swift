@@ -1,42 +1,17 @@
 //
-//  LogTableViewController.swift
+//  MainSessionTableViewController.swift
 //  FIT3178-Assignment-Project
 //
-//  Created by Jared Tucker on 20/4/2023.
+//  Created by Jared Tucker on 22/5/2023.
 //
 
 import UIKit
 
-class LogTableViewCell: UITableViewCell{
-    
-    @IBOutlet weak var sessionDateLabel: UILabel!
-    @IBOutlet weak var sessionNameLabel: UILabel!
-   
-    @IBOutlet weak var sessionExerciseLabel: UILabel!
-    
-    var sessionExerciseArr: [String]?
-    var sessionName: String?
-    var sessionDate: Date?
-    
-    
-    
-}
-
-class LogTableViewController: UITableViewController {
-    
-    let SESSIONCELL = "sessionLogCell";
-    let dateFormatter = DateFormatter();
-    
-
-
-//    var allSessions: [Session] = [Session(name: "Push", exercises: ["DB Press","Cable Flies", "Incline Smith Press","DB Curls", "DB Lateral Raises"], date: Date())]
-//
-    
-//    var currentSessions:[//Ill get to it later i cbf] = []
+class MainSessionTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Session Log"
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -48,31 +23,23 @@ class LogTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 1
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-//        return allSessions.count
         return 0
     }
 
-    
+    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: SESSIONCELL, for: indexPath) as! LogTableViewCell
-//        cell.sessionExerciseArr = allSessions[indexPath.row].exercises;
-//        cell.sessionNameLabel.text = allSessions[indexPath.row].name
-//        dateFormatter.dateFormat = "dd/MM/yyyy"
-//        cell.sessionDateLabel.text = dateFormatter.string(from: allSessions[indexPath.row].date)
-            
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+
+        // Configure the cell...
+
         return cell
     }
-    
-    func arrToString(arr:[String]) -> String{
-        return "yes"
-    }
-    
+    */
 
     /*
     // Override to support conditional editing of the table view.

@@ -6,15 +6,24 @@
 //
 
 import Foundation
-
-class Session{
-    var name: String
-    var exercises: [String]
-    var date: Date
+import FirebaseFirestoreSwift
+class Session: NSObject, Codable{
+    @DocumentID var id: String?
+    var name: String?
+    var userID: String?
+    var date: Date?
+    var exercises: [SessionExercise]?
     
-    init(name: String, exercises: [String], date: Date) {
-        self.name = name
-        self.exercises = exercises
-        self.date = date
+}
+
+class SessionExercise: NSObject, Codable{
+    var exercise: Exercise
+    var sets: Int
+    var reps: [Int]
+    
+    init(exercise: Exercise, sets: Int) {
+        self.exercise = exercise
+        self.sets = sets
+        self.reps = []
     }
 }
