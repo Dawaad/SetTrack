@@ -27,6 +27,7 @@ protocol DatabaseListener: AnyObject{
     
     func onRoutineChange(change: DatabaseChange, routines: [Routine])
     func onRoutineExerciseChange(change: DatabaseChange, routines: Routine)
+    func onSessionSubmision(change: DatabaseChange, sessions: [Session])
 }
 
 protocol DatabaseProtocol: AnyObject{
@@ -54,4 +55,19 @@ protocol DatabaseProtocol: AnyObject{
     func removeRoutine(routine:Routine) -> Bool
       //Fetching Methods
     
+    //Session Methods
+    var activeSession: Session?{get}
+    func setActiveSession()
+    func addSesssionToFirebase()
+    //Core Data Methods
+    func deleteSessionFromCoreData(session:CoreSession)
+    func fetchStoredSessionFromCoreData() -> CoreSession?
+    func saveSessionToCoreData(session: Session)
+    
+    func updateSetWeight(weight: Int, exerciseID: String, setNum: Int) -> Void
+    func updateSetRest(rest: Int, exerciseID: String, setNum: Int) -> Void
+    func updateSetReps(reps: Int, exerciseID: String, setNum: Int) -> Void
+    
+    //Transform Method
+    func routineToSession(routine: Routine) -> Session
 }

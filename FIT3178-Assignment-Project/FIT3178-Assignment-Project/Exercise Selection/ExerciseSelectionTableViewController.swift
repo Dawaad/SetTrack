@@ -9,6 +9,7 @@ import UIKit
 
 class ExerciseSelectionTableViewController: UITableViewController, DatabaseListener{
     
+    
     var listenerType: ListenerType = .exercise
     
     
@@ -39,6 +40,10 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
     func onRoutineExerciseChange(change: DatabaseChange, routines: Routine) {
         
     }
+    func onSessionSubmision(change: DatabaseChange, sessions: [Session]) {
+        
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()

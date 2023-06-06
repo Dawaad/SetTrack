@@ -28,5 +28,6 @@ class ExerciseDetails: NSObject, Codable{
     init(exercise: Exercise, sets: Int) {
         self.exercise = exercise
         self.sets = sets
+        
     }
 }

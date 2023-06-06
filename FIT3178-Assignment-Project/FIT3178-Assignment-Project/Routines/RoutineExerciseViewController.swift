@@ -10,6 +10,9 @@ import UIKit
 class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, DatabaseListener {
     
     
+    
+    
+    
     var listenerType: ListenerType = .routine
 
     @IBOutlet weak var routineTableView: UITableView!
@@ -28,7 +31,15 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
         selectedRoutine = routines
         routineTableView.reloadData()
     }
+    func onSessionSubmision(change: DatabaseChange, sessions: [Session]) {
+        
+    }
     
+    @IBAction func startSession(_ sender: Any) {
+        let session = databaseController?.routineToSession(routine: selectedRoutine!)
+        databaseController?.saveSessionToCoreData(session: session!)
+        performSegue(withIdentifier: "showSessionSegue", sender: nil)
+    }
         
     override func viewWillAppear(_ animated: Bool) {
         databaseController?.addListener(listener: self)

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22D68" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CoreExercise" representedClassName="CoreExercise" syncable="YES">
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="difficulty" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="instructions" optional="YES" attributeType="String"/>
+        <attribute name="isCustom" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="userID" optional="YES" attributeType="String"/>
+        <relationship name="sesssionExercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CoreSessionExercise" inverseName="exercise" inverseEntity="CoreSessionExercise"/>
+    </entity>
+    <entity name="CoreSession" representedClassName="CoreSession" syncable="YES">
+        <attribute name="endDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="routineID" optional="YES" attributeType="String"/>
+        <attribute name="startDateTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="userID" optional="YES" attributeType="String"/>
+        <relationship name="exercises" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CoreSessionExercise" inverseName="session" inverseEntity="CoreSessionExercise"/>
+    </entity>
+    <entity name="CoreSessionExercise" representedClassName="CoreSessionExercise" syncable="YES">
+        <attribute name="sets" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CoreExercise" inverseName="sesssionExercise" inverseEntity="CoreExercise"/>
+        <relationship name="performance" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CoreSetRepWeight" inverseName="sessionExercise" inverseEntity="CoreSetRepWeight"/>
+        <relationship name="session" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CoreSession" inverseName="exercises" inverseEntity="CoreSession"/>
+    </entity>
+    <entity name="CoreSetRepWeight" representedClassName="CoreSetRepWeight" syncable="YES">
+        <attribute name="rep" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="restTime" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="sessionExercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CoreSessionExercise" inverseName="performance" inverseEntity="CoreSessionExercise"/>
+    </entity>
+</model>

@@ -8,6 +8,7 @@
 import UIKit
 
 class RoutineSelectionTableViewController: UITableViewController, DatabaseListener {
+  
     
     
     
@@ -85,6 +86,10 @@ class RoutineSelectionTableViewController: UITableViewController, DatabaseListen
     func onRoutineExerciseChange(change: DatabaseChange, routines: Routine) {
         
     }
+    func onSessionSubmision(change: DatabaseChange, sessions: [Session]) {
+        
+    }
+    
     
 
     // MARK: - Table view data source
