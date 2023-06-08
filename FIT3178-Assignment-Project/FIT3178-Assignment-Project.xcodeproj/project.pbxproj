@@ -27,6 +27,12 @@
 		D61ECE1D2A2E9B2100732BA1 /* CoreSessionExercise+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE152A2E9B2100732BA1 /* CoreSessionExercise+CoreDataProperties.swift */; };
 		D61ECE1E2A2E9B2100732BA1 /* CoreExercise+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE162A2E9B2100732BA1 /* CoreExercise+CoreDataClass.swift */; };
 		D61ECE1F2A2E9B2100732BA1 /* CoreExercise+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE172A2E9B2100732BA1 /* CoreExercise+CoreDataProperties.swift */; };
+		D61ECE222A300C2000732BA1 /* RoutineSetEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE212A300C2000732BA1 /* RoutineSetEditViewController.swift */; };
+		D61ECE252A31A17800732BA1 /* PreviousSessionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE242A31A17800732BA1 /* PreviousSessionViewController.swift */; };
+		D61ECE282A31BD9300732BA1 /* StatisticRoutineSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE272A31BD9300732BA1 /* StatisticRoutineSelectionTableViewController.swift */; };
+		D61ECE2A2A31BFC500732BA1 /* StatisticExerciseSelectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE292A31BFC500732BA1 /* StatisticExerciseSelectionTableViewController.swift */; };
+		D61ECE2C2A31C25100732BA1 /* StatisticViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE2B2A31C25100732BA1 /* StatisticViewController.swift */; };
+		D61ECE2E2A31E01800732BA1 /* LineBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ECE2D2A31E01800732BA1 /* LineBarView.swift */; };
 		D6443F422A1CB7F300F05F4F /* HomeScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6443F412A1CB7F300F05F4F /* HomeScreenViewController.swift */; };
 		D649001929EE154F00390C22 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D649001829EE154F00390C22 /* FirebaseAuth */; };
 		D649001B29EE154F00390C22 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D649001A29EE154F00390C22 /* FirebaseFirestore */; };
@@ -69,6 +75,12 @@
 		D61ECE152A2E9B2100732BA1 /* CoreSessionExercise+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreSessionExercise+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		D61ECE162A2E9B2100732BA1 /* CoreExercise+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreExercise+CoreDataClass.swift"; sourceTree = "<group>"; };
 		D61ECE172A2E9B2100732BA1 /* CoreExercise+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreExercise+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		D61ECE212A300C2000732BA1 /* RoutineSetEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineSetEditViewController.swift; sourceTree = "<group>"; };
+		D61ECE242A31A17800732BA1 /* PreviousSessionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousSessionViewController.swift; sourceTree = "<group>"; };
+		D61ECE272A31BD9300732BA1 /* StatisticRoutineSelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticRoutineSelectionTableViewController.swift; sourceTree = "<group>"; };
+		D61ECE292A31BFC500732BA1 /* StatisticExerciseSelectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticExerciseSelectionTableViewController.swift; sourceTree = "<group>"; };
+		D61ECE2B2A31C25100732BA1 /* StatisticViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticViewController.swift; sourceTree = "<group>"; };
+		D61ECE2D2A31E01800732BA1 /* LineBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineBarView.swift; sourceTree = "<group>"; };
 		D6443F412A1CB7F300F05F4F /* HomeScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenViewController.swift; sourceTree = "<group>"; };
 		D649001E29EE1B7D00390C22 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D663656529EE114800EF5F0F /* FIT3178-Assignment-Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIT3178-Assignment-Project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +127,17 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		D61ECE262A31BD1E00732BA1 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				D61ECE272A31BD9300732BA1 /* StatisticRoutineSelectionTableViewController.swift */,
+				D61ECE292A31BFC500732BA1 /* StatisticExerciseSelectionTableViewController.swift */,
+				D61ECE2B2A31C25100732BA1 /* StatisticViewController.swift */,
+				D61ECE2D2A31E01800732BA1 /* LineBarView.swift */,
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
 		D649001529EE149A00390C22 /* Database */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,6 +178,7 @@
 		D663656729EE114800EF5F0F /* FIT3178-Assignment-Project */ = {
 			isa = PBXGroup;
 			children = (
+				D61ECE262A31BD1E00732BA1 /* Statistics */,
 				D61ECE202A2F233800732BA1 /* Home */,
 				D6B93FAC2A1A1C8F0006BD3A /* Session */,
 				D6A283322A08F76F0010896B /* Routines */,
@@ -219,6 +243,7 @@
 			children = (
 				D6A283332A08F7840010896B /* RoutineSelectionTableViewController.swift */,
 				D6A2833C2A0A0AB20010896B /* RoutineExerciseViewController.swift */,
+				D61ECE212A300C2000732BA1 /* RoutineSetEditViewController.swift */,
 			);
 			path = Routines;
 			sourceTree = "<group>";
@@ -227,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				D6B93FB32A1AF1C90006BD3A /* SessionViewController.swift */,
+				D61ECE242A31A17800732BA1 /* PreviousSessionViewController.swift */,
 			);
 			path = Session;
 			sourceTree = "<group>";
@@ -316,13 +342,17 @@
 			files = (
 				D6A2833D2A0A0AB20010896B /* RoutineExerciseViewController.swift in Sources */,
 				D6443F422A1CB7F300F05F4F /* HomeScreenViewController.swift in Sources */,
+				D61ECE222A300C2000732BA1 /* RoutineSetEditViewController.swift in Sources */,
 				D6A6E07529F687D000A90AE5 /* LoginViewController.swift in Sources */,
+				D61ECE2E2A31E01800732BA1 /* LineBarView.swift in Sources */,
 				D606159E29F7DCD70002524E /* ExerciseCategoryTableViewController.swift in Sources */,
 				D618C70C29F676FF000A4D5B /* DatabaseController.swift in Sources */,
+				D61ECE2C2A31C25100732BA1 /* StatisticViewController.swift in Sources */,
 				D602919B29F7A0500052F63C /* AccountViewController.swift in Sources */,
 				D6A283342A08F7840010896B /* RoutineSelectionTableViewController.swift in Sources */,
 				D618C70A29F676E9000A4D5B /* FirebaseController.swift in Sources */,
 				D663656D29EE114800EF5F0F /* ViewController.swift in Sources */,
+				D61ECE252A31A17800732BA1 /* PreviousSessionViewController.swift in Sources */,
 				D61ECE1E2A2E9B2100732BA1 /* CoreExercise+CoreDataClass.swift in Sources */,
 				D663656929EE114800EF5F0F /* AppDelegate.swift in Sources */,
 				D6B93FB42A1AF1C90006BD3A /* SessionViewController.swift in Sources */,
@@ -335,6 +365,7 @@
 				D663656B29EE114800EF5F0F /* SceneDelegate.swift in Sources */,
 				D618C70629F676CB000A4D5B /* Exercise.swift in Sources */,
 				D61ECE182A2E9B2100732BA1 /* CoreSession+CoreDataClass.swift in Sources */,
+				D61ECE2A2A31BFC500732BA1 /* StatisticExerciseSelectionTableViewController.swift in Sources */,
 				D6A6E07729F687DF00A90AE5 /* EmailLoginViewController.swift in Sources */,
 				D61ECE1D2A2E9B2100732BA1 /* CoreSessionExercise+CoreDataProperties.swift in Sources */,
 				D689D75E2A1C8712004B2D32 /* contents.xcdatamodeld in Sources */,
@@ -346,6 +377,7 @@
 				D602919D29F7A33B0052F63C /* TabBarViewController.swift in Sources */,
 				D664A70429FF9A1E008EF5C5 /* ChooseCategoryTableViewController.swift in Sources */,
 				D663657329EE114800EF5F0F /* FIT3178_Assignment_Project.xcdatamodeld in Sources */,
+				D61ECE282A31BD9300732BA1 /* StatisticRoutineSelectionTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

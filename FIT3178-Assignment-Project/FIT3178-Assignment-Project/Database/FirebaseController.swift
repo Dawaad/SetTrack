@@ -12,14 +12,18 @@ import Firebase
 import FirebaseAuth
 import CoreData
 class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsControllerDelegate{
+
     
     
-   
     
     
     
-       
-    var selectedRoutine: Routine
+    
+    
+    
+    
+    
+    var selectedRoutine: Routine?
     var database: Firestore
     var authController: Auth
     var usersRef: CollectionReference?
@@ -28,13 +32,15 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
     var sessionRef: CollectionReference?
     var listeners = MulticastDelegate<DatabaseListener>()
     var currentUser: FirebaseAuth.User?
-//    var authListenerHandler: AuthStateDidChangeListenerHandle?
+    //    var authListenerHandler: AuthStateDidChangeListenerHandle?
     var activeSession: Session?
     var allExercises: [Exercise] = [Exercise]()
     var allRoutines: [Routine] = [Routine]()
     var allSessions: [Session] = [Session]()
     var persistantContainer: NSPersistentContainer
     var activeSesssionContainer: NSFetchedResultsController<CoreSession>?
+    var statRoutine: Routine?
+    var statExercise: Exercise?
     
     override init() {
         
@@ -69,7 +75,7 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
             }
             
         }
-       
+        
     }
     
     func cleanup() {
@@ -92,7 +98,7 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
             listener.onRoutineChange(change: .update, routines: allRoutines)
         }
         if listener.listenerType == .routine || listener.listenerType == .all{
-            listener.onRoutineExerciseChange(change: .update, routines: selectedRoutine)
+            listener.onRoutineExerciseChange(change: .update, routines: selectedRoutine!)
         }
         if listener.listenerType == .sessions || listener.listenerType == .all{
             listener.onSessionSubmision(change: .update, sessions: allSessions)
@@ -106,7 +112,7 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
     
     
     func emailLogin(email: String, password: String) {
-       
+        
         authController.signIn(withEmail: email, password: password){ authResult, error in
             if let error = error{
                 print("Sign in failed \(error)")
@@ -114,14 +120,14 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
                 return
             }
             guard let user = authResult?.user else{
-             
+                
                 return
             }
             
             
             
         }
-      
+        
     }
     
     func emailCreateAccount(email: String, password: String)  {
@@ -134,7 +140,7 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
                 return
             }
             guard let user = authResult?.user else{
-
+                
                 return
             }
             
@@ -144,12 +150,12 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
                 error in
                 if let error = error{
                     print("Error inserting using into database \(error)")
-                 
+                    
                     return
                 }
             }
         }
-  
+        
     }
     
     func googleSignIn(credential: AuthCredential) {
@@ -175,8 +181,8 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
             }
         } catch {
             print("Failed to add exercise to firestore")
-           
-           
+            
+            
             
         }
         
@@ -193,12 +199,12 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
         }
         return false
     }
-  
+    
     
     func getExerciseByID(_ id: String) -> Exercise?{
-       
+        
         for exercise in allExercises{
-           
+            
             if exercise.id == id{
                 return exercise
             }
@@ -212,150 +218,218 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
             if let error = error{
                 print("Error Retrieving Exercises \(error)")
             }
+            
+            else{
                 
-                    else{
-                        
-                        if querySnapshot!.documents.count > 0 {
-                            self.parseExerciseSnapshot(snapshot: (querySnapshot?.documents)!)
-                            return
-                        }
-                        else{
-                            print("No Documents Found")
-                            return
-                        }
-                        
-                    }
-                }
-                return
-            }
-            
-            func parseExerciseSnapshot(snapshot: [QueryDocumentSnapshot]) {
-                for exercise in snapshot{
-                   let retrievedExercises = Exercise()
-                    retrievedExercises.name = exercise.data()["name"] as? String
-                    retrievedExercises.userID = exercise.data()["userID"] as? String
-                    retrievedExercises.isCustom = exercise.data()["isCustom"] as? Bool
-                    retrievedExercises.category = exercise.data()["category"] as? String
-                    retrievedExercises.instructions = exercise.data()["instructioins"] as? String
-                    retrievedExercises.difficulty = exercise.data()["difficulty"] as? String
-                    retrievedExercises.id = exercise.documentID
-                    allExercises.append(retrievedExercises)
-                }
-                
-                listeners.invoke{(listener) in
-                    if listener.listenerType == ListenerType.exercise || listener.listenerType == ListenerType.all{
-                        listener.onExerciseChange(change: .update, userExercises: allExercises)
-                    }
-                }
-                setUpRoutineListener(user: currentUser!)
-                setUpSessionListener(user: currentUser!)
-            }
-            
-            func setUpRoutineListener(user: FirebaseAuth.User){
-                routinesRef?.whereField("userID", isEqualTo: currentUser!.uid).getDocuments{(querySnapshot, error) in
-                    if let error = error{
-                        print("Error Retrieving Routines with Error \(error)")
-                    } else{
-                        if querySnapshot!.documents.count > 0{
-                            self.parseRoutineSnapshot(snapshot: (querySnapshot?.documents)!)
-                            return
-                        } else{
-                            print("No Documents Found")
-                            return
-                        }
-                    }
-                }
-            }
-            
-            func parseRoutineSnapshot(snapshot: [QueryDocumentSnapshot]){
-                var localRoutine =  [Routine]()
-                for routine in snapshot{
-                
-                    let retrievedRoutine = Routine()
-                    retrievedRoutine.name = routine.data()["name"] as? String
-                    retrievedRoutine.userID = routine.data()["userID"] as? String
-                    
-                    retrievedRoutine.exercises = []
-                    if let exerciseDetailRef = routine.data()["exercises"] as? [[String: Any]]{
-                        for exercise in exerciseDetailRef{
-                            
-                            if let ref = exercise["ref"] as? DocumentReference,
-                               let sets = exercise["sets"] as? Int{
-                               
-                                if let exercise = getExerciseByID(ref.documentID){
-                                    
-                                    let newExerciseDetail = ExerciseDetails(exercise: exercise, sets: sets)
-                                    retrievedRoutine.exercises.append(newExerciseDetail)
-                                }
-                            }
-                            
-                        }
-                    }
-                    
-                    
-                    localRoutine.append(retrievedRoutine)
-                    //Idk ill parse it later
-                   
-                }
-                allRoutines = localRoutine
-                listeners.invoke{(listener) in
-                    if listener.listenerType == ListenerType.routines || listener.listenerType == ListenerType.all{
-                        listener.onRoutineChange(change: .update, routines: allRoutines)
-                    }
-                }
-            }
-            
-            func addRoutineToFirebase(routine: Routine) -> Bool {
-                if currentUser != nil{
-                    routine.userID = currentUser?.uid
-                }
-                if let routineRef = routinesRef?.addDocument(data: [
-                    "name": routine.name,
-                    "userID" : routine.userID
-                ]){
-                    routine.id = routineRef.documentID
-                    allRoutines.append(routine)
-                    return true
-                    
+                if querySnapshot!.documents.count > 0 {
+                    self.parseExerciseSnapshot(snapshot: (querySnapshot?.documents)!)
+                    return
                 }
                 else{
-                    print("Error Occured when adding Routine to Firebase")
-                    return false
-                }
-            }
-            func addExerciseToRoutine(exercise: Exercise) -> Bool {
-                var chosenExercise = exercise
-               
-                if !exercise.isCustom!{
-                    chosenExercise = AddExerciseToFirebase(exercise: exercise)
-                }
-         
-                guard let exerciseID = chosenExercise.id, let routineID = selectedRoutine.id else{
-                    return false
+                    print("No Documents Found")
+                    return
                 }
                 
-                if let newExerciseRef = exercisesRef?.document(exerciseID){
-                    let exerciseMap: [String:Any] = [
-                        "ref": newExerciseRef,
-                        "sets": 1
-                    ]
+            }
+        }
+        return
+    }
+    
+    func parseExerciseSnapshot(snapshot: [QueryDocumentSnapshot]) {
+        for exercise in snapshot{
+            let retrievedExercises = Exercise()
+            retrievedExercises.name = exercise.data()["name"] as? String
+            retrievedExercises.userID = exercise.data()["userID"] as? String
+            retrievedExercises.isCustom = exercise.data()["isCustom"] as? Bool
+            retrievedExercises.category = exercise.data()["category"] as? String
+            retrievedExercises.instructions = exercise.data()["instructioins"] as? String
+            retrievedExercises.difficulty = exercise.data()["difficulty"] as? String
+            retrievedExercises.id = exercise.documentID
+            allExercises.append(retrievedExercises)
+        }
+        
+        listeners.invoke{(listener) in
+            if listener.listenerType == ListenerType.exercise || listener.listenerType == ListenerType.all{
+                listener.onExerciseChange(change: .update, userExercises: allExercises)
+            }
+        }
+        setUpRoutineListener(user: currentUser!)
+        setUpSessionListener(user: currentUser!)
+    }
+    
+    func setUpRoutineListener(user: FirebaseAuth.User){
+        routinesRef?.whereField("userID", isEqualTo: currentUser!.uid).getDocuments{(querySnapshot, error) in
+            if let error = error{
+                print("Error Retrieving Routines with Error \(error)")
+            } else{
+                if querySnapshot!.documents.count > 0{
+                    self.parseRoutineSnapshot(snapshot: (querySnapshot?.documents)!)
+                    return
+                } else{
+                    print("No Documents Found")
+                    return
+                }
+            }
+        }
+    }
+    
+    func parseRoutineSnapshot(snapshot: [QueryDocumentSnapshot]){
+        var localRoutine =  [Routine]()
+        for routine in snapshot{
+            
+            let retrievedRoutine = Routine()
+            retrievedRoutine.name = routine.data()["name"] as? String
+            retrievedRoutine.userID = routine.data()["userID"] as? String
+            retrievedRoutine.id = routine.documentID
+            retrievedRoutine.exercises = []
+            if let exerciseDetailRef = routine.data()["exercises"] as? [[String: Any]]{
+                for exercise in exerciseDetailRef{
+                    
+                    if let ref = exercise["ref"] as? DocumentReference,
+                       let sets = exercise["sets"] as? Int{
+                        
+                        if let exercise = getExerciseByID(ref.documentID){
+                            
+                            let newExerciseDetail = ExerciseDetails(exercise: exercise, sets: sets)
+                            retrievedRoutine.exercises.append(newExerciseDetail)
+                        }
+                    }
+                    
+                }
+            }
+            
+            
+            localRoutine.append(retrievedRoutine)
+            //Idk ill parse it later
+            
+        }
+        allRoutines = localRoutine
+        listeners.invoke{(listener) in
+            if listener.listenerType == ListenerType.routines || listener.listenerType == ListenerType.all{
+                listener.onRoutineChange(change: .update, routines: allRoutines)
+            }
+        }
+    }
+    
+    func addRoutineToFirebase(routine: Routine) -> Bool {
+        if currentUser != nil{
+            routine.userID = currentUser?.uid
+        }
+        if let routineRef = routinesRef?.addDocument(data: [
+            "name": routine.name,
+            "userID" : routine.userID
+        ]){
+            routine.id = routineRef.documentID
+            allRoutines.append(routine)
+            return true
+            
+        }
+        else{
+            print("Error Occured when adding Routine to Firebase")
+            return false
+        }
+    }
+    func addExerciseToRoutine(exercise: Exercise, set:Int) -> Bool {
+        var chosenExercise = exercise
+        
+        if !exercise.isCustom!{
+            chosenExercise = AddExerciseToFirebase(exercise: exercise)
+        }
+        
+        guard let exerciseID = chosenExercise.id, let routineID = selectedRoutine!.id else{
+            return false
+        }
+        
+        if let newExerciseRef = exercisesRef?.document(exerciseID){
+            let exerciseMap: [String:Any] = [
+                "ref": newExerciseRef,
+                "sets": 1
+            ]
             routinesRef?.document(routineID).updateData(["exercises":FieldValue.arrayUnion([exerciseMap])])
-            selectedRoutine.exercises.append(ExerciseDetails(exercise: chosenExercise, sets: 1))
+            selectedRoutine!.exercises.append(ExerciseDetails(exercise: chosenExercise, sets: set))
         }
         listeners.invoke{(listener) in
             if listener.listenerType == ListenerType.routine || listener.listenerType == ListenerType.all{
-                listener.onRoutineExerciseChange(change: .update, routines: selectedRoutine)
+                listener.onRoutineExerciseChange(change: .update, routines: selectedRoutine!)
             }
         }
         return true
-              
+        
+    }
+    func removeExerciseFromRoutine(exercise: ExerciseDetails, routine:Routine) -> Bool {
+        
+        if let deletedExerciseRef = exercisesRef?.document(exercise.exercise.id!){
+            let deletedExerciseMap: [String:Any] = [
+                "ref": deletedExerciseRef,
+                "sets": exercise.sets
+            ]
+            
+            routinesRef?.document(selectedRoutine!.id!).updateData(["exercises": FieldValue.arrayRemove([deletedExerciseMap])])
+            
+            selectedRoutine!.exercises =  selectedRoutine!.exercises.filter{ $0.exercise.id != exercise.exercise.id}
+            listeners.invoke{(listener) in
+                if listener.listenerType == ListenerType.routine || listener.listenerType == ListenerType.all{
+                    listener.onRoutineExerciseChange(change: .update, routines: selectedRoutine!)
+                }
+            }
+            return true
+        }
+        
+        return false
+    }
+    
+    func signOut() {
+        do{
+            try authController.signOut()
+        }
+        catch let error as NSError{
+            print("Unable to sign out with \(error)")
+        }
+        
+        selectedRoutine = nil
+        activeSession = nil
+        allExercises = []
+        allRoutines = []
+        allSessions = []
+        
+    }
+    
+    func updateExerciseSetCountInRoutine(exercise: ExerciseDetails, set: Int, routine: Routine) -> Bool{
+        if let deletedExerciseRef = exercisesRef?.document(exercise.exercise.id!){
+            let deletedExerciseMap: [String:Any] = [
+                "ref": deletedExerciseRef,
+                "sets": exercise.sets
+            ]
+            
+            routinesRef?.document(selectedRoutine!.id!).updateData(["exercises": FieldValue.arrayRemove([deletedExerciseMap])])
+        }
+            
+            
+            if let newExerciseRef = exercisesRef?.document(exercise.exercise.id!){
+                let exerciseMap: [String:Any] = [
+                    "ref": newExerciseRef,
+                    "sets": set
+                ]
+                routinesRef?.document(selectedRoutine!.id!).updateData(["exercises":FieldValue.arrayUnion([exerciseMap])])
+
+            }
+            listeners.invoke{(listener) in
+                if listener.listenerType == ListenerType.routine || listener.listenerType == ListenerType.all{
+                    listener.onRoutineExerciseChange(change: .update, routines: selectedRoutine!)
+                }
+            }
+        
+
+
+        return true
+
     }
     
     
     func selectRoutine(routine: Routine) {
         
         selectedRoutine = routine
-        print(selectedRoutine.id)
+       
     }
     
     func removeRoutine(routine: Routine) -> Bool {
@@ -366,9 +440,7 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
         }
         return false
     }
-    func removeExerciseFromRoutine(exercise: Exercise, routine:Routine) -> Bool {
-        return true
-    }
+   
     
    
     
@@ -568,11 +640,16 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
             let retrievedSession = Session()
             retrievedSession.name = session.data()["name"] as? String
             retrievedSession.routineID = session.data()["routineID"] as? String
+            retrievedSession.id = session.documentID
             retrievedSession.userID = session.data()["userID"] as? String
-            retrievedSession.startDateTime = session.data()["startDateTime"] as? Date
-            retrievedSession.endDateTime = session.data()["endDateTime"] as? Date
+            var sd = session.data()["startDateTime"] as? Timestamp
+            retrievedSession.startDateTime = NSDate(timeIntervalSince1970: Double(sd!.seconds)) as! Date
             
+            var ed = session.data()["endDateTime"] as? Timestamp
+            retrievedSession.endDateTime = NSDate(timeIntervalSince1970: Double(ed!.seconds)) as! Date
             
+
+
             
             retrievedSession.exercises = []
             if let sessionExerciseData = session.data()["exercises"] as? [[String: Any]]{
@@ -600,7 +677,7 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
             
         }
         allSessions = localSession
-        print(allSessions)
+        
         listeners.invoke{(listener) in
             if listener.listenerType == .sessions || listener.listenerType == ListenerType.all{
                 listener.onSessionSubmision(change: .update, sessions: allSessions)
@@ -752,7 +829,49 @@ class FirebaseController: NSObject, DatabaseProtocol, NSFetchedResultsController
         }catch {
             print("Error encoding session: \(error.localizedDescription)")
         }
+        allSessions.append(session)
         
+    }
+    
+    func setStatRoutine(routine: Routine) {
+        statRoutine = routine
+    }
+    
+    func setStatExercise(exercise: Exercise) {
+        statExercise = exercise
+    }
+    
+    func retrieveDataForGraph(routine: Routine, exercise: Exercise) -> [Int] {
+        
+        var routineSessions = [Session]()
+        var sessionExercises = [SessionExercise]()
+        var performanceINFO = [Int]()
+        
+        routineSessions = allSessions.filter{$0.routineID == statRoutine!.id}.sorted{$0.endDateTime! < $1.endDateTime!}
+        for session in routineSessions{
+            var filterExercise = session.exercises!.filter{$0.exercise.id == statExercise!.id}
+            if filterExercise.count>0{
+                sessionExercises.append(filterExercise[0])
+            }
+          
+            
+        }
+        for exercise in sessionExercises {
+            performanceINFO.append(calculateAveragePerformance(repWeight: exercise.performance))
+        }
+        
+        return performanceINFO
+        
+    }
+    
+    func calculateAveragePerformance(repWeight: [SetRepWeight]) -> Int{
+        var volume:Int = 0
+        var count:Int = repWeight.count
+        for set in repWeight{
+            volume += (set.weight * set.rep)
+        }
+      
+        return volume/count
     }
     
 

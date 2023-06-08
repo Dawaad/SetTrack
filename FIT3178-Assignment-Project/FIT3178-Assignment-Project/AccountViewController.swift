@@ -10,11 +10,12 @@ import FirebaseAuth
 class AccountViewController: UIViewController {
     var authListenerHandler: AuthStateDidChangeListenerHandle?
     let auth = Auth.auth()
-    
+    weak var databaseController: DatabaseProtocol?
     @IBOutlet weak var EmailLabel: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        let appDelegate = UIApplication.shared.delegate as? AppDelegate
+        databaseController = appDelegate?.databaseController
         // Do any additional setup after loading the view.
     }
     
@@ -34,8 +35,9 @@ class AccountViewController: UIViewController {
     
     @IBAction func accountSignOut(_ sender: Any) {
         do{
-            try auth.signOut()
+            try databaseController?.signOut()
             performSegue(withIdentifier: "signOutSegue", sender: nil)
+          
         } catch let error as NSError{
             print("Error signing out: %@", error.localizedDescription)
             displayMessage("Error signing out", "There was an error when attempting to sign out")
@@ -64,6 +66,8 @@ class AccountViewController: UIViewController {
         if segue.identifier == "signOutSegue"{
             if let destination = segue.destination as? LoginViewController{
                 destination.navigationItem.hidesBackButton = true
+                
+                
             }
         }
     }

@@ -8,27 +8,12 @@
 import UIKit
 
 
-class SessionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PreviousSessionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-
-    @IBAction func submitSession(_ sender: Any) {
-        let alertController = UIAlertController(title: "Confirm Completion", message: "Are you sure you want to finish", preferredStyle: .alert)
-        
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel){(action) in
-            return
-        }
-        let submitAction = UIAlertAction(title: "OK", style: .default){[weak self] (action) in
-            self?.databaseController?.addSesssionToFirebase()
-            self?.navigationController?.popViewController(animated: true)
-            return
-        }
-        
-        alertController.addAction(cancelAction)
-        alertController.addAction(submitAction)
-        present(alertController, animated: true, completion: nil)
-    }
     
+    @IBOutlet weak var startDateLabel: UILabel!
+    
+    @IBOutlet weak var endDateLabel: UILabel!
     
     
     
@@ -44,7 +29,9 @@ class SessionViewController: UIViewController, UITableViewDelegate, UITableViewD
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
 
-        selectedSession = databaseController?.activeSession
+        guard let session = selectedSession else{
+            return
+        }
 
             tableView.delegate = self
             tableView.dataSource = self
@@ -55,16 +42,15 @@ class SessionViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.allowsSelection = false
         tableView.reloadData()
        
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yy HH:mm"
+        
+        startDateLabel.text = "Start Date: " +  dateFormatter.string(from: (selectedSession?.startDateTime)!)
+        endDateLabel.text = "End Date: " + dateFormatter.string(from: (selectedSession?.endDateTime)!)
         navigationItem.title = selectedSession?.name
         
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-           view.addGestureRecognizer(tapGesture)
         // Do any additional setup after loading the view.
-    }
-    
-    @objc func handleTap() {
-        view.endEditing(true)
     }
     
     
@@ -81,7 +67,7 @@ class SessionViewController: UIViewController, UITableViewDelegate, UITableViewD
 
 //
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! sessionExerciseCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! PreviousSessionExerciseCell
         let exercise = selectedSession!.exercises![indexPath.row]
         cell.configure(with: exercise)
         
@@ -115,7 +101,7 @@ class SessionViewController: UIViewController, UITableViewDelegate, UITableViewD
 
 }
 
-class sessionExerciseCell: UITableViewCell, UITableViewDataSource, UITableViewDelegate{
+class PreviousSessionExerciseCell: UITableViewCell, UITableViewDataSource, UITableViewDelegate{
     
     
     var exercise: SessionExercise?
@@ -150,7 +136,7 @@ class sessionExerciseCell: UITableViewCell, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell: sessionRepCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! sessionRepCell
+        let cell: PreviousSessionRepCell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! PreviousSessionRepCell
         
         cell.configure(with: exercise!.performance[indexPath.row], with: exercise!.exercise.id!, with: indexPath.row)
         return cell
@@ -158,7 +144,7 @@ class sessionExerciseCell: UITableViewCell, UITableViewDataSource, UITableViewDe
     
 }
 
-class sessionRepCell: UITableViewCell{
+class PreviousSessionRepCell: UITableViewCell{
     
 
     @IBOutlet weak var setNumber: UILabel!
@@ -182,35 +168,6 @@ class sessionRepCell: UITableViewCell{
         
     }
     
-    
-    @IBAction func updateSetRep(_ sender: Any) {
-        
-        guard let numRep = Int(setReps.text!) else{
-            setReps.text = repWeight?.rep.formatted()
-            return
-        }
-        
-        databaseController?.updateSetReps(reps: Int(setReps.text!)!, exerciseID: setExerciseID!, setNum: numSet!)
-    }
-    
-    
-    @IBAction func updateSetWeight(_ sender: Any) {
-        guard let numWeight = Int(setWeight.text!) else{
-            setWeight.text = repWeight?.weight.formatted()
-            return
-        }
-        databaseController?.updateSetWeight(weight: Int(setWeight.text!)!, exerciseID: setExerciseID!, setNum: numSet!)
-    }
-    
-    
-    
-    @IBAction func updateSetRest(_ sender: Any) {
-        guard let numRest = Int(setRest.text!) else{
-            setRest.text = repWeight?.restTime.formatted()
-            return
-        }
-        databaseController?.updateSetRest(rest: Int(setRest.text!)!, exerciseID: setExerciseID!, setNum: numSet!)
-    }
     
     
     override  func awakeFromNib() {

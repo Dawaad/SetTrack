@@ -40,19 +40,21 @@ protocol DatabaseProtocol: AnyObject{
     func emailLogin(email:String, password: String)
     func emailCreateAccount(email:String, password: String)
     func googleSignIn(credential:AuthCredential)
+    func signOut()
 //    //Exercise Methods
     func AddExerciseToFirebase(exercise: Exercise) -> Exercise
     func deleteExercise(exercise: Exercise) -> Bool
 //
 //
 //    //Routine Creation Methods
-    var selectedRoutine: Routine{get}
+    var selectedRoutine: Routine? {get}
     func selectRoutine(routine:Routine) -> Void
     func addRoutineToFirebase(routine:Routine) -> Bool
-    func addExerciseToRoutine(exercise:Exercise) -> Bool
+    func addExerciseToRoutine(exercise:Exercise, set:Int) -> Bool
     //Routine Removal Methods
-    func removeExerciseFromRoutine(exercise:Exercise, routine: Routine) -> Bool
+    func removeExerciseFromRoutine(exercise:ExerciseDetails, routine: Routine) -> Bool
     func removeRoutine(routine:Routine) -> Bool
+    func updateExerciseSetCountInRoutine(exercise: ExerciseDetails, set: Int,routine: Routine) -> Bool
       //Fetching Methods
     
     //Session Methods
@@ -70,4 +72,13 @@ protocol DatabaseProtocol: AnyObject{
     
     //Transform Method
     func routineToSession(routine: Routine) -> Session
+    
+    //Statistic Method
+    var statRoutine: Routine?{get}
+    var statExercise: Exercise?{get}
+    
+    func setStatRoutine(routine: Routine)
+    func setStatExercise(exercise: Exercise)
+    
+    func retrieveDataForGraph(routine: Routine, exercise: Exercise) -> [Int]
 }

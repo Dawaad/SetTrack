@@ -121,6 +121,13 @@ class ExerciseCreationViewController: UIViewController, DifficultyChangeDelegate
         
         
         // Do any additional setup after loading the view.
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+           view.addGestureRecognizer(tapGesture)
+        // Do any additional setup after loading the view.
+    }
+    
+    @objc func handleTap() {
+        view.endEditing(true)
     }
     
     

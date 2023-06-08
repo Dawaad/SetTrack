@@ -15,7 +15,8 @@ class TabBarViewController: UITabBarController {
             print(viewControllers)
             viewControllers[0].title = "Home"
             viewControllers[1].title = "Routines"
-            viewControllers[2].title = "Account"
+            viewControllers[2].title = "Statistics"
+            viewControllers[3].title = "Account"
         }
         // Do any additional setup after loading the view.
     }

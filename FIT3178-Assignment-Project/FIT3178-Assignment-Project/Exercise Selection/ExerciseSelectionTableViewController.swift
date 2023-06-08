@@ -222,7 +222,7 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
             exercise = apiExercises[indexPath.row]
         }
         
-        self.databaseController?.addExerciseToRoutine(exercise: exercise!)
+        self.databaseController?.addExerciseToRoutine(exercise: exercise!, set: 1)
         
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
         self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)

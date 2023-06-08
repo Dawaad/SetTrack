@@ -56,6 +56,7 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
         databaseController = appDelegate?.databaseController
         guard let routine = selectedRoutine else{
             return
+            
         }
        
         
@@ -65,6 +66,7 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
         self.routineTableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         routineTableView.delegate = self
         routineTableView.dataSource = self
+        
         // Do any additional setup after loading the view.
     }
     
@@ -83,9 +85,37 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
         content.text = selectedRoutine?.exercises[indexPath.row].exercise.name
         content.secondaryText = "\(selectedRoutine!.exercises[indexPath.row].sets) Set"
         cell.contentConfiguration = content
+        cell.backgroundColor = UIColor(named: "Cells")
+        
+        
         return cell
         
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var exercise = selectedRoutine!.exercises[indexPath.row]
+        
+        performSegue(withIdentifier: "repSetEditSegue", sender: (exercise))
+        
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            tableView.performBatchUpdates({
+                
+                databaseController?.removeExerciseFromRoutine(exercise: (selectedRoutine?.exercises[indexPath.row])!, routine: databaseController!.selectedRoutine!)
+           
+            
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+            })
+        }
+    }
+    
+    
+    
+    
     
     
     
@@ -94,14 +124,21 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
     
    
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        
+        if segue.identifier == "repSetEditSegue" {
+            if let (exercise) = sender as? (ExerciseDetails),
+               let segueDestination = segue.destination as? RoutineSetEditViewController{
+                segueDestination.selectedExerciseDetails = exercise
+            }
+        }
     }
-    */
+    
 
 }
