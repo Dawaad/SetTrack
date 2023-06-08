@@ -40,7 +40,7 @@ protocol DatabaseProtocol: AnyObject{
     func emailLogin(email:String, password: String)
     func emailCreateAccount(email:String, password: String)
     func googleSignIn(credential:AuthCredential)
-    func signOut()
+    func signOut() -> Bool
 //    //Exercise Methods
     func AddExerciseToFirebase(exercise: Exercise) -> Exercise
     func deleteExercise(exercise: Exercise) -> Bool

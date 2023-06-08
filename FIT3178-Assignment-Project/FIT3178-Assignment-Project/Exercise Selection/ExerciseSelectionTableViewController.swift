@@ -101,7 +101,7 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
     
     
     let MAX_ITEMS_PER_REQUEST = 10
-    let MAX_REQUESTS = 3 //Change Later Im just tryna preserve my tokens for now lol
+    let MAX_REQUESTS = 10 
     
     func retrieveExercises(offset:Int) async {
         
@@ -222,7 +222,9 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
             exercise = apiExercises[indexPath.row]
         }
         
-        self.databaseController?.addExerciseToRoutine(exercise: exercise!, set: 1)
+        if !(self.databaseController!.addExerciseToRoutine(exercise: exercise!, set: 1)){
+            displayMessage("Exercise already in routine", "Cannot add this exercise to the routine, as it already exists within the current routine")
+        }
         
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
         self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
@@ -237,6 +239,14 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
         return true
     }
     */
+    func displayMessage(_ title:String, _ message:String){
+        let alertControlller = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alertControlller.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+        
+        self.present(alertControlller, animated: true, completion: nil
+        )
+    }
     
     
 

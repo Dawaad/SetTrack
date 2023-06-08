@@ -20,6 +20,7 @@ class StatisticViewController: UIViewController  {
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
         setupView()
+        navigationItem.title = databaseController?.statExercise?.name
     
        
         // Do any additional setup after loading the view.
@@ -35,10 +36,11 @@ class StatisticViewController: UIViewController  {
         
         lineView.translatesAutoresizingMaskIntoConstraints = false
                NSLayoutConstraint.activate([
-                   lineView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                    lineView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                   lineView.widthAnchor.constraint(equalToConstant: 300),
-                   lineView.heightAnchor.constraint(equalToConstant: 400)
+//                   lineView.widthAnchor.constraint(equalToConstant: 300),
+                   lineView.heightAnchor.constraint(equalToConstant: 400),
+                   lineView.leftAnchor.constraint(equalTo: view.leftAnchor),
+                   lineView.rightAnchor.constraint(equalTo: view.rightAnchor)
                ])
     }
     

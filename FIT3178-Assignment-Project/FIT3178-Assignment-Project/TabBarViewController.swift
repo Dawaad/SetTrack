@@ -11,6 +11,7 @@ class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Defining the title of all views present in the tab bar controller
         if let viewControllers = self.viewControllers{
             print(viewControllers)
             viewControllers[0].title = "Home"

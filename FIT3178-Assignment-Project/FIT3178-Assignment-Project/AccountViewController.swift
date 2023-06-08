@@ -14,6 +14,7 @@ class AccountViewController: UIViewController {
     @IBOutlet weak var EmailLabel: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Setting up the database controller
         let appDelegate = UIApplication.shared.delegate as? AppDelegate
         databaseController = appDelegate?.databaseController
         // Do any additional setup after loading the view.
@@ -21,6 +22,7 @@ class AccountViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //Setting up the Firebase Authentication Listener
         authListenerHandler = auth.addStateDidChangeListener{
             (auth,user) in
             if user != nil{
@@ -35,6 +37,7 @@ class AccountViewController: UIViewController {
     
     @IBAction func accountSignOut(_ sender: Any) {
         do{
+            //Calling the signout method from the database controller
             try databaseController?.signOut()
             performSegue(withIdentifier: "signOutSegue", sender: nil)
           
@@ -45,9 +48,7 @@ class AccountViewController: UIViewController {
     }
     
     
-     @IBAction func accountDelete(_ sender: Any) {
-         
-     }
+    
     
     func displayMessage(_ title:String, _ message:String){
         let alertControlller = UIAlertController(title: title, message: message, preferredStyle: .alert)
