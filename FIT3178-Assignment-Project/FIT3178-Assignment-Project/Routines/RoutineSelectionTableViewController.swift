@@ -42,23 +42,30 @@ class RoutineSelectionTableViewController: UITableViewController, DatabaseListen
     }
     
     @IBAction func newRoutine(_ sender: Any) {
+        //Set up an alert controller to allow users to name their routine
         let alertController = UIAlertController(title: "Routine Name", message: "Please Enter a name for this routine", preferredStyle: .alert)
         alertController.addTextField { (textField) in
+            //Insert a text field
             textField.placeholder = "Routine Name"
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel){(action) in
             return
         }
+        //If the user presses submit
         let submitAction = UIAlertAction(title: "OK", style: .default){[weak self] (action) in
             guard let textField = alertController.textFields?.first else {return}
+            textField.resignFirstResponder()
+            //Check if the name is not empty
             let routineName = textField.text ?? ""
             if (routineName.isEmpty){
                 return
             }
             else{
+                //Create a new routine object and assign its name
                 let newRoutine = Routine()
                 newRoutine.name = routineName
                 
+                //Add the routine to Firebase, and update the current selected routine in the controller
                 if ((self?.databaseController?.addRoutineToFirebase(routine: newRoutine)) != nil){
                     self?.databaseController?.selectRoutine(routine: newRoutine)
                     self?.performSegue(withIdentifier: "routineDetailSegue", sender: newRoutine)
@@ -142,7 +149,7 @@ class RoutineSelectionTableViewController: UITableViewController, DatabaseListen
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            //Delete from Database please
+            //Delete from Database 
             databaseController?.removeRoutine(routine: userRoutines[indexPath.row])
             // Delete the row from the data source
             userRoutines.remove(at: indexPath.row)

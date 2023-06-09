@@ -30,7 +30,7 @@ class EmailLoginViewController: UIViewController {
         if !validateUserInfo(){
             return
         }
-        
+        //Call the controller to sign into FireAuth
         databaseController?.emailLogin(email: emailTextField.text!, password: passwordTextField.text!)
 
     }
@@ -39,7 +39,7 @@ class EmailLoginViewController: UIViewController {
         if !validateUserInfo(){
             return
         }
-        
+        //Call the controller to create account and to sign into FireAuth
         databaseController?.emailCreateAccount(email: emailTextField.text!, password: passwordTextField.text!)
     }
     
@@ -69,6 +69,7 @@ class EmailLoginViewController: UIViewController {
             return false
             
         }
+        //Setting up email regex to ensure that a valid email contains xxxx@xxxx.xxx
         let emailRegex = /(.+)@(.+)[.](.*)/
         if email.isEmpty || email.firstMatch(of: emailRegex) == nil{
             displayMessage("Invalid Email", "Please input a valid email")

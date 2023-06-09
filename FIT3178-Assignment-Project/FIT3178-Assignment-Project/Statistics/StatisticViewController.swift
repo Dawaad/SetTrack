@@ -27,13 +27,17 @@ class StatisticViewController: UIViewController  {
     }
     
     func setupView(){
+        /* Tutorial used to connected Swift UI Chart to UIKit
+         Link: https://www.youtube.com/watch?v=qOdZuBIBQWA&pp=ygU2aG93IHRvIGNyZWF0ZSBhIGNoYXJ0IGluIHN3aWZ0IHVpIGFuZCB1c2UgaXQgaW4gdWlraXRd
+         */
+        
         let controller = UIHostingController(rootView: lineBarView())
         guard let lineView = controller.view else{
             return
         }
         
         view.addSubview(lineView)
-        
+        //Move the view into the centre of the view, taking up all space on the x axis
         lineView.translatesAutoresizingMaskIntoConstraints = false
                NSLayoutConstraint.activate([
                    lineView.centerYAnchor.constraint(equalTo: view.centerYAnchor),

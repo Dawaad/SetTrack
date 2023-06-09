@@ -7,10 +7,12 @@
 
 import UIKit
 protocol DifficultyChangeDelegate: AnyObject{
+    //Create delegation to pass back difficulty string to selection controller
     func selectDifficulty(_ selectedDifficulty: String)
 }
 
 class ChooseDifficultyTableViewController: UITableViewController {
+    
     weak var delegate: DifficultyChangeDelegate?
     let difficulty: [String] = ["beginner", "intermediate", "expert"]
     override func viewDidLoad() {

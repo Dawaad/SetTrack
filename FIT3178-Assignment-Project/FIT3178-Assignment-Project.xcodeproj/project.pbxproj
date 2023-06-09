@@ -159,6 +159,14 @@
 			path = Datamodel;
 			sourceTree = "<group>";
 		};
+		D64FC3202A3303C400250AA2 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				D602919A29F7A0500052F63C /* AccountViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
 		D663655C29EE114800EF5F0F = {
 			isa = PBXGroup;
 			children = (
@@ -178,6 +186,7 @@
 		D663656729EE114800EF5F0F /* FIT3178-Assignment-Project */ = {
 			isa = PBXGroup;
 			children = (
+				D64FC3202A3303C400250AA2 /* Account */,
 				D61ECE262A31BD1E00732BA1 /* Statistics */,
 				D61ECE202A2F233800732BA1 /* Home */,
 				D6B93FAC2A1A1C8F0006BD3A /* Session */,
@@ -195,7 +204,6 @@
 				D663657629EE114900EF5F0F /* LaunchScreen.storyboard */,
 				D663657929EE114900EF5F0F /* Info.plist */,
 				D663657129EE114800EF5F0F /* FIT3178_Assignment_Project.xcdatamodeld */,
-				D602919A29F7A0500052F63C /* AccountViewController.swift */,
 				D602919C29F7A33B0052F63C /* TabBarViewController.swift */,
 			);
 			path = "FIT3178-Assignment-Project";

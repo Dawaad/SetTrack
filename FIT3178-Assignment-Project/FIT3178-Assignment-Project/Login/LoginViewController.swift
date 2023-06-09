@@ -31,9 +31,10 @@ class LoginViewController: UIViewController{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //Set up Fireauth listener
         authListenerHandler = auth.addStateDidChangeListener{(auth, user) in
             if user != nil{
-                print(user?.email)
+                //If the user still exists, move to the main screen
                 self.performSegue(withIdentifier: "loginSegue", sender: nil)
                 
             }
@@ -49,10 +50,14 @@ class LoginViewController: UIViewController{
     
     
         func signInGoogle() async {
+            
+            /*
+             Tutorial Used: https://firebase.google.com/docs/auth/ios/google-signin
+             */
         guard let clientID = FirebaseApp.app()?.options.clientID else{
             fatalError("No Client ID found in Firebase Configuration")
         }
-        
+      
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

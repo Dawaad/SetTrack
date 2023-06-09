@@ -29,7 +29,6 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
     
     func onExerciseChange(change: DatabaseChange, userExercises: [Exercise]) {
         customExercises = userExercises.filter{$0.category == apiCategoryFormat && $0.isCustom == true}
-        print("cringe")
         tableView.reloadData()
     }
     
@@ -55,6 +54,7 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
         }
         
         navigationItem.title = category
+        //Replace spaces with '_' so that is is supported in the api call
         apiCategoryFormat = category.replacingOccurrences(of: " ", with: "_").lowercased()
         tableView.allowsMultipleSelection = true
         tableView.allowsMultipleSelectionDuringEditing = true
@@ -87,8 +87,10 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //If no exercises have been retrieved by the API
         if apiExercises.isEmpty{
             Task{
+                //Call the retrieval function
                 await retrieveExercises(offset:0)
             }
         }
@@ -104,32 +106,39 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
     let MAX_REQUESTS = 10 
     
     func retrieveExercises(offset:Int) async {
-        
+        //Add correct encoding to support API Call
         let muscle = apiCategoryFormat?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        //Define the API String
         let url = URL(string: "https://api.api-ninjas.com/v1/exercises?muscle=\(muscle!)&offset=\(offset*10)")!
+        //Define a URL Request and assign to it, the API Key
         var request = URLRequest(url: url)
         request.setValue("CvDeegsYeUPwFe5/w0EKxQ==lteJMNQQKB0SQnNW", forHTTPHeaderField: "X-Api-Key")
         do {
+            
             let (data, _) = try await URLSession.shared.data(for: request)
             let decoder = JSONDecoder()
+            //Decode the JSON response into an Exercise Object
             let exerciseData = try decoder.decode([Exercise].self, from: data)
             
+           
             let startIndex = apiExercises.count
             let endIndex = startIndex + exerciseData.count - 1
             let indexPath = (startIndex...endIndex).map{IndexPath(row: $0, section: 1)}
-            
+            //Add exercises into the array
             for exercise in exerciseData{
                 exercise.category = apiCategoryFormat
                 exercise.isCustom = false
                 apiExercises.append(exercise)
             }
             
-            
+            //Insert the exercises into the table view without resetting the entire table
             tableView.beginUpdates()
             tableView.insertRows(at: indexPath, with: .automatic)
             tableView.endUpdates()
             
+            
             if exerciseData.count == MAX_ITEMS_PER_REQUEST, offset + 1 < MAX_REQUESTS{
+                //Retrieve more exercises if we have not reached maximum capacity
                 await retrieveExercises(offset: offset + 1)
             }
         } catch let error{
@@ -167,6 +176,7 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        //Defining headers for each section
         if section == SECTION_CUSTOM{
             return "Custom Exercises"
         }
@@ -195,16 +205,18 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var exercise: Exercise?
+        //Retrieve the exercise from the correct array
         if indexPath.section == SECTION_CUSTOM {
             exercise = customExercises[indexPath.row]
         }
         else{
             exercise = apiExercises[indexPath.row]
         }
+        //Deque the cell based on the indexPath and Section
         let cell = dequeCell(indexPath: indexPath)
         
         var content = cell!.defaultContentConfiguration()
-
+        //Assign the visuals of the cell
         content.text = exercise?.name
         content.secondaryText = exercise?.difficulty?.capitalized
         cell!.contentConfiguration = content
@@ -221,12 +233,14 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
         else{
             exercise = apiExercises[indexPath.row]
         }
-        
+        //Add the exercise to a routine
         if !(self.databaseController!.addExerciseToRoutine(exercise: exercise!, set: 1)){
+            //If the exercise already exists in the routine (based on ID)
             displayMessage("Exercise already in routine", "Cannot add this exercise to the routine, as it already exists within the current routine")
         }
         
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+        //Pop Multiple view controllers (ie. This screen and the exercise category selection)
         self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true)
         
     }
@@ -256,7 +270,9 @@ class ExerciseSelectionTableViewController: UITableViewController, DatabaseListe
         if editingStyle == .delete && indexPath.section == SECTION_CUSTOM{
             // Delete the row from the data source
             tableView.performBatchUpdates({
+                //Remove from Firebase
                 databaseController?.deleteExercise(exercise: customExercises[indexPath.row])
+                //Update the tableview and the local array
                 customExercises.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 tableView.reloadSections([SECTION_CUSTOM], with: .automatic)

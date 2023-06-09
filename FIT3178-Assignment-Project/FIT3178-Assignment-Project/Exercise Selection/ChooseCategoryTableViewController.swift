@@ -24,6 +24,7 @@ class ChooseCategoryTableViewController: UITableViewController {
     let CELL_LEGS = "legsCategoryCell"
     let SECTION_LEGS = 3
     
+    //Defining all avaliable categories and dividing into sub-sections
     var chestCategory: [String] = [
         "Chest"
     ]

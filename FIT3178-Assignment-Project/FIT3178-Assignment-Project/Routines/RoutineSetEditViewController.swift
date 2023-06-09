@@ -30,6 +30,10 @@ class RoutineSetEditViewController: UIViewController, UITextFieldDelegate {
         
         
         navigationItem.title = exercise.exercise.name
+        /* Set up a gestuer recgoniser to ensure that when the user taps off the keyboard
+         it will close automatically, and any changes made will be saved and updated
+         in the controller and the database
+         */
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
            view.addGestureRecognizer(tapGesture)
         
@@ -49,12 +53,13 @@ class RoutineSetEditViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func updateExerciseSetNum(_ sender: Any) {
         let prev = Int(exerciseSetNum.text!)
+        //Check if the number of sets is >=1
         guard let num = Int(exerciseSetNum.text!), num>=1 else{
             exerciseSetNum.text = selectedExerciseDetails?.sets.formatted()
             return
         }
-        print(num)
         
+        //Call the controller functions to update the number of sets for a particular session
         databaseController?.updateExerciseSetCountInRoutine(exercise: selectedExerciseDetails!, set: num ,routine: databaseController!.selectedRoutine!)
         selectedExerciseDetails?.sets = num
         
@@ -62,6 +67,7 @@ class RoutineSetEditViewController: UIViewController, UITextFieldDelegate {
     
     
     @IBAction func removeExerciseFromRoutine(_ sender: Any) {
+        //Call the controller function to remove an exercise
         databaseController?.removeExerciseFromRoutine(exercise: selectedExerciseDetails!, routine: databaseController!.selectedRoutine!)
         navigationController?.popViewController(animated: true)
     }

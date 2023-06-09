@@ -36,7 +36,9 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     @IBAction func startSession(_ sender: Any) {
+        //Convert the current routine to a session
         let session = databaseController?.routineToSession(routine: selectedRoutine!)
+        //When user start the sesssion, save the session to Core Data
         databaseController?.saveSessionToCoreData(session: session!)
         performSegue(withIdentifier: "showSessionSegue", sender: nil)
     }
@@ -60,9 +62,8 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
         }
        
         
-        //Set Text Field to be routine
-        //Also research debouncing
         
+        //Register a new cell to the table view
         self.routineTableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         routineTableView.delegate = self
         routineTableView.dataSource = self
@@ -82,9 +83,11 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell = self.routineTableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier)! as UITableViewCell
         var content = cell.defaultContentConfiguration()
+        //Set up the visuals of the cell
         content.text = selectedRoutine?.exercises[indexPath.row].exercise.name
         content.secondaryText = "\(selectedRoutine!.exercises[indexPath.row].sets) Set"
         cell.contentConfiguration = content
+        //Alter the background colour to that defined in the Colour Pallette
         cell.backgroundColor = UIColor(named: "Cells")
         
         
@@ -102,11 +105,11 @@ class RoutineExerciseViewController: UIViewController, UITableViewDelegate, UITa
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete{
             tableView.performBatchUpdates({
-                
+                //Remove the exercise from the routine array
                 databaseController?.removeExerciseFromRoutine(exercise: (selectedRoutine?.exercises[indexPath.row])!, routine: databaseController!.selectedRoutine!)
            
             
-            
+            //Delete row from the table view
             tableView.deleteRows(at: [indexPath], with: .fade)
             tableView.reloadData()
             })

@@ -25,12 +25,15 @@ class ExerciseCreationViewController: UIViewController, DifficultyChangeDelegate
     
     @IBOutlet weak var instructionsTextView: UITextView!
     func selectDifficulty(_ selectedDifficulty: String) {
+        //Set the difficulty variable based on user selection
         difficulty = selectedDifficulty
         difficultyLabel.text = difficulty!.capitalized
     }
     
     func selectCategory(_ selectedCategory: String) {
+        //Format the selected category so that it is API compatible
         category = selectedCategory.replacingOccurrences(of: " ", with: "_").lowercased()
+        //Set the category value based on user selection
         categoryLabel.text = selectedCategory
         
     }
@@ -56,13 +59,15 @@ class ExerciseCreationViewController: UIViewController, DifficultyChangeDelegate
         
         
         guard let name = nameTextField.text, let instructions = instructionsTextView.text, let difficulty = difficulty, let category = category else{
+            //If empty, exit and display message
             displayMessage("Empty Fields", "Please ensure all fields are filled out")
             return
         }
+        // If exercise information is not valid, return
         if !validateExerciseInformation(name: name, instructions: instructions){
             return
         }
-        
+        //Set up a new blank exercise and insert values
         let newExercise = Exercise()
         newExercise.name = name
         newExercise.category = category
@@ -70,7 +75,7 @@ class ExerciseCreationViewController: UIViewController, DifficultyChangeDelegate
         newExercise.isCustom = true
         newExercise.difficulty = difficulty
         newExercise.userID = currentUserID ?? " "
-        
+        //Add to firebase
         databaseController?.AddExerciseToFirebase(exercise: newExercise)
         
         navigationController?.popViewController(animated: true)
@@ -108,9 +113,7 @@ class ExerciseCreationViewController: UIViewController, DifficultyChangeDelegate
     
     override func viewDidLoad() {
         
-//        nameTextField.clipsToBounds = true
-//        nameTextField.layer.cornerRadius = 20
-//        nameTextField.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+
         
         let appDelegate = UIApplication.shared.delegate as?
             AppDelegate

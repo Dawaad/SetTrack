@@ -18,6 +18,7 @@ class ExerciseCategoryTableViewController: UITableViewController {
     let CELL_LEGS = "legsCategoryCell"
     let SECTION_LEGS = 3
     
+    //Organise Categories into Subsections
     var chestCategory: [String] = [
         "Chest"
     ]
@@ -40,7 +41,7 @@ class ExerciseCategoryTableViewController: UITableViewController {
         "Triceps",
         "Forearms"
     ]
-    //Organise them and then seperate them through table headers!?
+   
     
 
     let CELL_CATEGORY = "categoryCell"
@@ -48,6 +49,7 @@ class ExerciseCategoryTableViewController: UITableViewController {
     func getCategory(section:Int, row:Int) -> String? {
         var category: String?
         switch section {
+            //Access correct array based on section
             case SECTION_CHEST:
             category = chestCategory[row]
             case SECTION_ARMS:
@@ -66,6 +68,7 @@ class ExerciseCategoryTableViewController: UITableViewController {
     
     func dequeCell(section: Int, indexPath: IndexPath) -> UITableViewCell? {
         var cell: UITableViewCell?
+        //deque correct category cell based on the section that it is located in
         switch section {
         case SECTION_CHEST:
             cell = tableView.dequeueReusableCell(withIdentifier: CELL_CHEST, for: indexPath)

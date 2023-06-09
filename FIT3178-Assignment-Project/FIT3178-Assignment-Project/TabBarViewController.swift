@@ -13,7 +13,7 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
         //Defining the title of all views present in the tab bar controller
         if let viewControllers = self.viewControllers{
-            print(viewControllers)
+           
             viewControllers[0].title = "Home"
             viewControllers[1].title = "Routines"
             viewControllers[2].title = "Statistics"
